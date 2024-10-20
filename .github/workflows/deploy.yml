@@ -31,6 +31,8 @@ jobs:
         run: |
           npm install
           git reset --hard
+          npx tsc
+          npm install
       - name: 📂 Sync folders and files to the server
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
