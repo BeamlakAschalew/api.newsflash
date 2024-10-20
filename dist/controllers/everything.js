@@ -68,6 +68,7 @@ const everything = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                         return row;
                     });
                     const articles = [];
+                    // test
                     sanitizedResults.forEach((article) => {
                         articles.push({
                             source: {

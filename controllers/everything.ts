@@ -79,6 +79,7 @@ const everything = async (req: Request, res: Response) => {
             return row;
           });
           const articles: Article[] = [];
+          // test
           sanitizedResults.forEach((article: any) => {
             articles.push({
               source: {
