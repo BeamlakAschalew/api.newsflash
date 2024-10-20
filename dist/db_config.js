@@ -24,14 +24,4 @@ const poolConfig = {
     keepAliveInitialDelay: 0,
 };
 const pool = mysql2_1.default.createPool(poolConfig);
-pool.on("connection", function (connection) {
-    connection.query("SET time_zone = '+03:00'", (err) => {
-        if (err) {
-            console.error("Failed to set time zone for connection:", err);
-        }
-        else {
-            console.log("Time zone set to Africa/Nairobi for connection.");
-        }
-    });
-});
 exports.database = pool;

@@ -1,30 +1,9 @@
 import { Request, Response } from "express";
 import { database } from "../db_config";
 import he from "he";
+import { ResponseModel, Article, Source } from "../types";
 
 const escapeLike = (str: string) => `%${str.replace(/([%_])/g, "\\$1")}%`;
-
-interface ResponseModel {
-  total_results: number;
-  status: string;
-  articles: Article[] | null;
-}
-
-interface Article {
-  id: number;
-  source: Source;
-  title: string;
-  description: string;
-  url: string;
-  image_url: string;
-  published_at: string;
-  scraped_at: string;
-}
-
-interface Source {
-  id: number;
-  name: string;
-}
 
 const everything = async (req: Request, res: Response) => {
   try {
@@ -105,6 +84,7 @@ const everything = async (req: Request, res: Response) => {
               source: {
                 id: article.source_id,
                 name: article.name,
+                source_image_url: article.source_image_url,
               },
               id: article.id,
               title: article.title,
