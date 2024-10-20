@@ -76,6 +76,7 @@ const everything = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                                 source_image_url: article.source_image_url,
                             },
                             id: article.id,
+                            category_id: article.category_id,
                             title: article.title,
                             description: article.description,
                             url: article.article_url,

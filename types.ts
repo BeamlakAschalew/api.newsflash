@@ -23,6 +23,7 @@ export interface ResponseModel {
 export interface Article {
   id: number;
   source: ArticleSource;
+  category_id: number;
   title: string;
   description: string;
   url: string;

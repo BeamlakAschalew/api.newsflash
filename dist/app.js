@@ -12,7 +12,7 @@ const categories_1 = __importDefault(require("./controllers/categories"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 8000;
-app.get("/", (req, res) => {
+app.get("/", (_, res) => {
     res.send("Newsflash api");
 });
 app.get("/api/everything", everything_1.default);
