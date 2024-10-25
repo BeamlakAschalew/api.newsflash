@@ -62,6 +62,9 @@ const everything = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                         if (row.description) {
                             row.description = (0, utils_1.removeHtmlTags)(row.description);
                         }
+                        if (row.title) {
+                            row.title = (0, utils_1.removeHtmlTags)(row.title);
+                        }
                         return row;
                     });
                     const articles = [];

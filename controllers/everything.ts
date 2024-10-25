@@ -77,6 +77,9 @@ const everything = async (req: Request, res: Response) => {
             if (row.description) {
               row.description = removeHtmlTags(row.description);
             }
+            if (row.title) {
+              row.title = removeHtmlTags(row.title);
+            }
             return row;
           });
           const articles: Article[] = [];
