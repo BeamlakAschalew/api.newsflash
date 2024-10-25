@@ -1,0 +1,3 @@
+Newsflash API readme
+
+Endpoints:
