@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { database } from "../db_config";
 import he from "he";
 import { ResponseModel, Article, Source } from "../types";
+import { removeHtmlTags } from "../utils";
 
 const escapeLike = (str: string) => `%${str.replace(/([%_])/g, "\\$1")}%`;
 
@@ -74,12 +75,11 @@ const everything = async (req: Request, res: Response) => {
           const r = result as any;
           const sanitizedResults = r.map((row: any) => {
             if (row.description) {
-              row.description = he.escape(row.description);
+              row.description = removeHtmlTags(row.description);
             }
             return row;
           });
           const articles: Article[] = [];
-          // test
           sanitizedResults.forEach((article: any) => {
             articles.push({
               source: {

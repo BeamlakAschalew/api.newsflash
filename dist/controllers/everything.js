@@ -8,12 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_config_1 = require("../db_config");
-const he_1 = __importDefault(require("he"));
+const utils_1 = require("../utils");
 const escapeLike = (str) => `%${str.replace(/([%_])/g, "\\$1")}%`;
 const everything = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -63,12 +60,11 @@ const everything = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                     const r = result;
                     const sanitizedResults = r.map((row) => {
                         if (row.description) {
-                            row.description = he_1.default.escape(row.description);
+                            row.description = (0, utils_1.removeHtmlTags)(row.description);
                         }
                         return row;
                     });
                     const articles = [];
-                    // test
                     sanitizedResults.forEach((article) => {
                         articles.push({
                             source: {
