@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import everything from "./controllers/everything";
 import sources from "./controllers/sources";
 import categories from "./controllers/categories";
+import lightReader from "./controllers/light_reader";
 
 //For env File
 dotenv.config();
@@ -17,6 +18,7 @@ app.get("/", (_: Request, res: Response) => {
 app.get("/api/everything", everything);
 app.get("/api/sources", sources);
 app.get("/api/categories", categories);
+app.get("/api/light-reader", lightReader);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
