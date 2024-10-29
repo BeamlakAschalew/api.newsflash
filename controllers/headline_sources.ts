@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import { database } from "../db_config";
 import { Source, Sources } from "../types";
 
-const sources = (req: Request, res: Response) => {
+const headlineSources = (req: Request, res: Response) => {
   try {
-    const sql = `SELECT * FROM sources;`;
+    const sql = `SELECT sources.id, name, url, created_at, updated_at, source_image_url, category FROM headline_sources as hs JOIN sources ON hs.source_id = sources.id;`;
     database.getConnection((error, connection) => {
       if (error) res.status(500).send(error);
       connection.query(sql, null, (error, result) => {
@@ -15,7 +15,7 @@ const sources = (req: Request, res: Response) => {
           total_sources: sources.length,
           sources: result as Source[],
         };
-        return res.send(r);
+        res.send(r);
       });
     });
   } catch (error) {
@@ -23,4 +23,4 @@ const sources = (req: Request, res: Response) => {
   }
 };
 
-export default sources;
+export default headlineSources;

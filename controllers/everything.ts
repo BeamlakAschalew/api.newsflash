@@ -11,10 +11,11 @@ const everything = async (req: Request, res: Response) => {
     const {
       q,
       searchIn = "title,description",
-      sources,
-      categories,
-      domains,
-      excludeDomains,
+      logic = "or",
+      source,
+      category,
+      excludeSource,
+      excludeCategory,
       from,
       to,
       sortBy = "published_at",
@@ -22,17 +23,74 @@ const everything = async (req: Request, res: Response) => {
       page = "1",
     } = req.query;
 
-    let sql = `SELECT * FROM articles JOIN sources ON articles.source_id = sources.id WHERE 1=1`;
+    let sql = `SELECT sources.id AS source_id, sources.name, sources.source_image_url, articles.id, articles.category_id, categories.name AS category_name, articles.title, articles.description, articles.article_url, articles.image_url, articles.published_at, articles.scraped_at FROM articles JOIN sources ON articles.source_id = sources.id JOIN categories ON articles.category_id = categories.id WHERE 1=1`;
     const params: (string | number)[] = [];
 
-    if (typeof q === "string") {
+    const queries = typeof q === "string" ? q.split(",") : [];
+
+    if (queries.length > 0) {
       const searchFields =
         typeof searchIn === "string" ? searchIn.split(",") : [];
-      const searchConditions = searchFields
-        .map((field) => `${field} LIKE ?`)
-        .join(" OR ");
-      params.push(...Array(searchFields.length).fill(escapeLike(q)));
-      sql += ` AND (${searchConditions})`;
+
+      const queryConditions = queries.map((term) => {
+        const searchConditions = searchFields
+          .map((field) => `${field} LIKE ?`)
+          .join(" OR ");
+
+        params.push(
+          ...Array(searchFields.length).fill(escapeLike(term.trim()))
+        );
+
+        return `(${searchConditions})`;
+      });
+
+      sql += ` AND (${queryConditions.join(
+        ` ${logic.toString().toUpperCase()} `
+      )})`;
+    }
+
+    const categories = typeof category === "string" ? category.split(",") : [];
+    if (categories.length > 0) {
+      const categoryConditions = categories
+        .map(() => `category_id = ?`)
+        .join(` OR `);
+
+      params.push(...categories.map((id) => parseInt(id.trim(), 10)));
+
+      sql += ` AND (${categoryConditions})`;
+    }
+
+    const sources = typeof source === "string" ? source.split(",") : [];
+    if (sources.length > 0) {
+      const sourceConditions = sources.map(() => `source_id = ?`).join(` OR `);
+
+      params.push(...sources.map((id) => parseInt(id.trim(), 10)));
+
+      sql += ` AND (${sourceConditions})`;
+    }
+
+    const excludeCategoryIds =
+      typeof excludeCategory === "string" ? excludeCategory.split(",") : [];
+    if (excludeCategoryIds.length > 0) {
+      const excludeCategoryConditions = excludeCategoryIds
+        .map(() => `category_id <> ?`)
+        .join(" AND ");
+
+      params.push(...excludeCategoryIds.map((id) => parseInt(id.trim(), 10)));
+
+      sql += ` AND (${excludeCategoryConditions})`;
+    }
+
+    const excludeSourceIds =
+      typeof excludeSource === "string" ? excludeSource.split(",") : [];
+    if (excludeSourceIds.length > 0) {
+      const excludeSourceConditions = excludeSourceIds
+        .map(() => `source_id <> ?`)
+        .join(" AND ");
+
+      params.push(...excludeSourceIds.map((id) => parseInt(id.trim(), 10)));
+
+      sql += ` AND (${excludeSourceConditions})`;
     }
 
     if (typeof from === "string") {
@@ -92,6 +150,7 @@ const everything = async (req: Request, res: Response) => {
               },
               id: article.id,
               category_id: article.category_id,
+              category_name: article.category_name,
               title: article.title,
               description: article.description,
               url: article.article_url,

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_config_1 = require("../db_config");
-const sources = (req, res) => {
+const headlineSources = (req, res) => {
     try {
-        const sql = `SELECT * FROM sources;`;
+        const sql = `SELECT sources.id, name, url, created_at, updated_at, source_image_url, category FROM headline_sources as hs JOIN sources ON hs.source_id = sources.id;`;
         db_config_1.database.getConnection((error, connection) => {
             if (error)
                 res.status(500).send(error);
@@ -16,7 +16,7 @@ const sources = (req, res) => {
                     total_sources: sources.length,
                     sources: result,
                 };
-                return res.send(r);
+                res.send(r);
             });
         });
     }
@@ -24,4 +24,4 @@ const sources = (req, res) => {
         res.status(500).send(error);
     }
 };
-exports.default = sources;
+exports.default = headlineSources;

@@ -24,6 +24,7 @@ export interface Article {
   id: number;
   source: ArticleSource;
   category_id: number;
+  category_name: string;
   title: string;
   description: string;
   url: string;
