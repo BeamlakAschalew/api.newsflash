@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { database } from "../db_config";
-import he from "he";
-import { ResponseModel, Article, Source } from "../types";
+import { ResponseModel, Article } from "../types";
 import { removeHtmlTags } from "../utils";
 
 const escapeLike = (str: string) => `%${str.replace(/([%_])/g, "\\$1")}%`;

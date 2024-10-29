@@ -5,6 +5,7 @@ import sources from "./controllers/sources";
 import categories from "./controllers/categories";
 import lightReader from "./controllers/light_reader";
 import headlineSources from "./controllers/headline_sources";
+import topHeadlines from "./controllers/top_headlines";
 
 //For env File
 dotenv.config();
@@ -20,6 +21,7 @@ app.get("/api/everything", everything);
 app.get("/api/sources", sources);
 app.get("/api/categories", categories);
 app.get("/api/light-reader", lightReader);
+app.get("/api/top-headlines", topHeadlines);
 app.get("/api/top-headlines/sources", headlineSources);
 
 app.listen(port, () => {
