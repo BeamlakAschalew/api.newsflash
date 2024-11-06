@@ -5,6 +5,7 @@ import { JSDOM } from "jsdom";
 
 const lightReader = async (req: Request, res: Response) => {
   const url = req.query.url as string;
+  const mode = req.query.mode;
 
   if (!url) {
     res.status(400).send({ error: "URL is required" });
@@ -41,6 +42,11 @@ const lightReader = async (req: Request, res: Response) => {
       }
     );
 
+    const isDarkMode = mode === "dark";
+    const backgroundColor = isDarkMode ? "#121212" : "#fafafa";
+    const textColor = isDarkMode ? "#e0e0e0" : "#333";
+    const linkColor = isDarkMode ? "#bb86fc" : "#0066cc";
+
     res.send(`
 <!DOCTYPE html>
 <html lang="en">
@@ -50,33 +56,33 @@ const lightReader = async (req: Request, res: Response) => {
         <title>${article!.title}</title>
         <style>
             body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            padding: 16px;
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fafafa;
+                font-family: Geist, Arial, sans-serif;
+                line-height: 1.6;
+                color: ${textColor};
+                padding: 16px;
+                max-width: 800px;
+                margin: 0 auto;
+                background-color: ${backgroundColor};
             }
             h1 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 0.5em;
+                font-size: 24px;
+                color: ${textColor};
+                margin-bottom: 0.5em;
             }
             p {
-            margin: 1em 0;
+                margin: 1em 0;
             }
             img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
+                max-width: 100%;
+                height: auto;
+                border-radius: 8px;
             }
             a {
-            color: #0066cc;
-            text-decoration: none;
+                color: ${linkColor};
+                text-decoration: none;
             }
             a:hover {
-            text-decoration: underline;
+                text-decoration: underline;
             }
         </style>
     </head>
