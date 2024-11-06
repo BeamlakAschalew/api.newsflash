@@ -36,7 +36,61 @@ const lightReader = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const reader = new readability_1.Readability(dom.window.document);
         const article = reader.parse();
         if (!article)
-            res.status(404).send({ error: "No article found" });
+            res.status(404).send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Error - Article Load Failed</title>
+          <style>
+              body {
+                  font-family: Arial, sans-serif;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  min-height: 100vh;
+                  margin: 0;
+                  background-color: #f9f9f9;
+                  color: #333;
+              }
+              .container {
+                  text-align: center;
+                  padding: 20px;
+                  border: 1px solid #ddd;
+                  border-radius: 8px;
+                  background-color: #fff;
+                  max-width: 500px;
+                  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+              }
+              h1 {
+                  color: #e63946;
+                  font-size: 24px;
+                  margin-bottom: 10px;
+              }
+              p {
+                  font-size: 16px;
+                  color: #555;
+                  margin-bottom: 20px;
+              }
+              a {
+                  color: #1d3557;
+                  text-decoration: none;
+                  font-weight: bold;
+              }
+              a:hover {
+                  text-decoration: underline;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="container">
+              <h1>Oops! Something went wrong.</h1>
+              <p>We couldn't find any article at this time. Please try again later.</p>
+          </div>
+      </body>
+      </html>
+      `);
         const baseUrl = new URL(url);
         const contentWithAbsoluteUrls = article.content.replace(/<img[^>]+src="([^">]+)"/g, (match, imgSrc) => {
             const absoluteSrc = imgSrc.startsWith("http")
@@ -57,7 +111,7 @@ const lightReader = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         <title>${article.title}</title>
         <style>
             body {
-                font-family: Arial, sans-serif;
+                font-family: Geist, Arial, sans-serif;
                 line-height: 1.6;
                 color: ${textColor};
                 padding: 16px;
@@ -96,7 +150,61 @@ const lightReader = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (error) {
         console.error("Error fetching article:", error);
-        res.status(500).send("Failed to load article.");
+        res.status(500).send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Error - Article Load Failed</title>
+          <style>
+              body {
+                  font-family: Arial, sans-serif;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  min-height: 100vh;
+                  margin: 0;
+                  background-color: #f9f9f9;
+                  color: #333;
+              }
+              .container {
+                  text-align: center;
+                  padding: 20px;
+                  border: 1px solid #ddd;
+                  border-radius: 8px;
+                  background-color: #fff;
+                  max-width: 500px;
+                  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+              }
+              h1 {
+                  color: #e63946;
+                  font-size: 24px;
+                  margin-bottom: 10px;
+              }
+              p {
+                  font-size: 16px;
+                  color: #555;
+                  margin-bottom: 20px;
+              }
+              a {
+                  color: #1d3557;
+                  text-decoration: none;
+                  font-weight: bold;
+              }
+              a:hover {
+                  text-decoration: underline;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="container">
+              <h1>Oops! Something went wrong.</h1>
+              <p>We couldn't load the article at this time. Please try again later.</p>
+          </div>
+      </body>
+      </html>
+      `);
     }
 });
 exports.default = lightReader;
