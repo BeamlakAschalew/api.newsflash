@@ -105,10 +105,12 @@ const topHeadlines = (req: Request, res: Response) => {
       sql += ` ORDER BY ${sortBy} DESC`;
     }
 
+    const pageSizeValidated = Number(pageSize) > 100 ? "100" : pageSize;
+
     const offset =
-      (parseInt(page as string) - 1) * parseInt(pageSize as string);
+      (parseInt(page as string) - 1) * parseInt(pageSizeValidated as string);
     sql += ` LIMIT ? OFFSET ?`;
-    params.push(parseInt(pageSize as string), offset);
+    params.push(parseInt(pageSizeValidated as string), offset);
 
     database.getConnection((error, connection) => {
       if (error) {
